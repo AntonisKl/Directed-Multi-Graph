@@ -15,42 +15,42 @@ char* allocName(char* name) {
 
 Graph* initGraph() {
     Graph* graph =  (Graph*) malloc(sizeof(Graph)); // MUST BE FREED
-    // graph.firstVertice = (HeadVertice*) malloc(sizeof(HeadVertice));  // MUST BE FREED
-    graph.verticesNum = 0;
-    graph.edgesNum = 0;
+    // graph->firstVertice = (HeadVertice*) malloc(sizeof(HeadVertice));  // MUST BE FREED
+    graph->verticesNum = 0;
+    graph->edgesNum = 0;
     return graph;
 }
 
 
 void freeConnVertice(ConnVertice* connVertice) {
-    if (connVertice.nextConnVertice != NULL)
-        freeConnVertice(connVertice.nextConnVertice);
-    free(connVertice.name)
+    if (connVertice->nextConnVertice != NULL)
+        freeConnVertice(connVertice->nextConnVertice);
+    free(connVertice->name);
     free(connVertice);
     return;
 }
 
 void freeHeadVertice(HeadVertice* headVertice) {
-    if (headVertice.nextHeadVertice != NULL)
-        freeHeadVertice(headVertice.nextHeadVertice);
-    freeConnVertice(headVertice.firstConnVertice);
-    free(headVertice.name)
+    if (headVertice->nextHeadVertice != NULL)
+        freeHeadVertice(headVertice->nextHeadVertice);
+    freeConnVertice(headVertice->firstConnVertice);
+    free(headVertice->name);
     free(headVertice);
     return;
 }
 
 void destroyGraph(Graph* graph) {
     if (graph != NULL) {
-        if (graph.verticesNum > 0)
+        if (graph->verticesNum > 0)
         {
-            // if (graph.firstVertice != NULL) {
-                freeHeadVertice(graph.firstVertice);
+            // if (graph->firstVertice != NULL) {
+                freeHeadVertice(graph->firstVertice);
             // }
         } else {
             printf("Graph is empty\n");
             return;
         }
-        // free(graph.lastVertice);
+        // free(graph->lastVertice);
         free(graph);
     }
     return;
@@ -58,20 +58,20 @@ void destroyGraph(Graph* graph) {
 
 
 HeadVertice* findHeadVerticeInGraph(Graph* graph, char* name) {
-    HeadVertice* curHeadVertice = graph.firstVertice;
+    HeadVertice* curHeadVertice = graph->firstVertice;
     char found = 0;
     while (curHeadVertice != NULL) {
-        if (strcmp(curHeadVertice.name, name) == 0) {
+        if (strcmp(curHeadVertice->name, name) == 0) {
             found = 1;
             break;
         }
-        curHeadVertice = curHeadVertice.nextHeadVertice;
+        curHeadVertice = curHeadVertice->nextHeadVertice;
     }
     return curHeadVertice;
 }
 
 HeadVertice** find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2) {
-    HeadVertice* curHeadVertice1 = graph.firstVertice, curHeadVertice2 = graph.firstVertice;
+    HeadVertice *curHeadVertice1 = graph->firstVertice, *curHeadVertice2 = graph->firstVertice;
     HeadVertice* foundHeadVertices[2];
     foundHeadVertices[0] = NULL;
     foundHeadVertices[1] = NULL;
@@ -79,26 +79,26 @@ HeadVertice** find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2) {
     char found1 = 0, found2 = 0;
     while (curHeadVertice1 != NULL && curHeadVertice2 != NULL) {
         if (found1 == 1) {
-            if (strcmp(curHeadVertice2.name, name2) == 0) {
+            if (strcmp(curHeadVertice2->name, name2) == 0) {
                 found2 = 1;
                 foundHeadVertices[1] = curHeadVertice2;
                 break;
             }
-            curHeadVertice2 = curHeadVertice2.nextHeadVertice;
+            curHeadVertice2 = curHeadVertice2->nextHeadVertice;
         } else if (found2 == 1) {
-            if (strcmp(curHeadVertice1.name, name1) == 0) {
+            if (strcmp(curHeadVertice1->name, name1) == 0) {
                 found1 = 1;
                 foundHeadVertices[0] = curHeadVertice1;
                 break;
             }
-            curHeadVertice1 = curHeadVertice1.nextHeadVertice;
+            curHeadVertice1 = curHeadVertice1->nextHeadVertice;
         } else {
-            if (strcmp(curHeadVertice1.name, name1) == 0) {
+            if (strcmp(curHeadVertice1->name, name1) == 0) {
                 found1 = 1;
                 foundHeadVertices[0] = curHeadVertice1;
             }
 
-            if (strcmp(curHeadVertice2.name, name2) == 0) {
+            if (strcmp(curHeadVertice2->name, name2) == 0) {
                 found2 = 1;
                 foundHeadVertices[1] = curHeadVertice2;
             }
@@ -106,8 +106,8 @@ HeadVertice** find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2) {
             if (found1 == 1 && found2 == 1)
                 return NULL;
 
-            curHeadVertice1 = curHeadVertice1.nextHeadVertice;
-            curHeadVertice2 = curHeadVertice2.nextHeadVertice;
+            curHeadVertice1 = curHeadVertice1->nextHeadVertice;
+            curHeadVertice2 = curHeadVertice2->nextHeadVertice;
         }
     }
     return foundHeadVertices;
@@ -115,46 +115,46 @@ HeadVertice** find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2) {
 
 void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned int weight) {
     ConnVertice* connVerticeToBeCreated;
-    if (headVertice.connVerticesNum == 0)
+    if (headVertice->connVerticesNum == 0)
     {
-        // headVertice.firstConnVertice = allocConnVertice();
-        connVerticeToBeCreated = headVertice.firstConnVertice;
+        // headVertice->firstConnVertice = allocConnVertice();
+        connVerticeToBeCreated = headVertice->firstConnVertice;
     } else {
-        connVerticeToBeCreated = headVertice.lastConnVertice.nextConnVertice;
+        connVerticeToBeCreated = headVertice->lastConnVertice->nextConnVertice;
     }
 
     connVerticeToBeCreated = allocConnVertice();
-    connVerticeToBeCreated.name = allocName(name);
-    strcpy(connVerticeToBeCreated.name, name);
-    connVerticeToBeCreated.weight = weight;
+    connVerticeToBeCreated->name = allocName(name);
+    strcpy(connVerticeToBeCreated->name, name);
+    connVerticeToBeCreated->weight = weight;
 
-    headVertice.connVerticesNum++;
-    headVertice.lastVertice = connVerticeToBeCreated;
+    headVertice->connVerticesNum++;
+    headVertice->lastConnVertice = connVerticeToBeCreated;
 
 }
 
 
 void insertVerticeToGraph(Graph* graph, char* name) {
     HeadVertice* headVerticeToBeCreated;
-    if (graph.verticesNum == 0) {
-        // graph.firstVertice = allocHeadVertice();
-        // graph.firstVertice.name = allocName(name);
-        // strcpy(graph.firstVertice.name, name);
+    if (graph->verticesNum == 0) {
+        // graph->firstVertice = allocHeadVertice();
+        // graph->firstVertice->name = allocName(name);
+        // strcpy(graph->firstVertice->name, name);
 
-        headVerticeToBeCreated = graph.firstVertice;
+        headVerticeToBeCreated = graph->firstVertice;
 
-        // graph.verticesNum++;
-        // graph.lastVertice = graph.firstVertice;
+        // graph->verticesNum++;
+        // graph->lastVertice = graph->firstVertice;
     } else {
-        headVerticeToBeCreated = graph.lastVertice.nextHeadVertice;
+        headVerticeToBeCreated = graph->lastVertice->nextHeadVertice;
     }
 
     headVerticeToBeCreated = allocHeadVertice();
-    headVerticeToBeCreated.name = allocName(name);
-    strcpy(headVerticeToBeCreated.name, name);
+    headVerticeToBeCreated->name = allocName(name);
+    strcpy(headVerticeToBeCreated->name, name);
 
-    graph.verticesNum++;
-    graph.lastVertice = headVerticeToBeCreated;
+    graph->verticesNum++;
+    graph->lastVertice = headVerticeToBeCreated;
     printf("Vertice with name: %s was added successfully\n", name);
     return;
 }
