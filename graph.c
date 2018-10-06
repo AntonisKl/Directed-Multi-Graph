@@ -25,17 +25,22 @@ Graph* initGraph() {
 void freeConnVertice(ConnVertice* connVertice) {
     if (connVertice->nextConnVertice != NULL)
         freeConnVertice(connVertice->nextConnVertice);
+    // printf("freed connVertice 1\n");
     free(connVertice->name);
     free(connVertice);
+    // printf("freed connVertice\n");
     return;
 }
 
 void freeHeadVertice(HeadVertice* headVertice) {
     if (headVertice->nextHeadVertice != NULL)
         freeHeadVertice(headVertice->nextHeadVertice);
-    freeConnVertice(headVertice->firstConnVertice);
+    // printf("freed headVertice 1\n");
+    if (headVertice->firstConnVertice != NULL)
+        freeConnVertice(headVertice->firstConnVertice);
     free(headVertice->name);
     free(headVertice);
+    // printf("freed headVertice\n");
     return;
 }
 
@@ -53,6 +58,7 @@ void destroyGraph(Graph* graph) {
         // free(graph->lastVertice);
         free(graph);
     }
+    printf("Graph was destroyed successfully\n");
     return;
 }
 
@@ -122,42 +128,44 @@ void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned 
     {
         // headVertice->firstConnVertice = allocConnVertice();
         connVerticeToBeCreated = headVertice->firstConnVertice;
+
+        headVertice->firstConnVertice = allocConnVertice();
+        headVertice->firstConnVertice->name = allocName(name);
+        strcpy(headVertice->firstConnVertice->name, name);
+        headVertice->firstConnVertice->weight = weight;
+
+        headVertice->lastConnVertice = headVertice->firstConnVertice;
     } else {
         connVerticeToBeCreated = headVertice->lastConnVertice->nextConnVertice;
+
+        headVertice->lastConnVertice->nextConnVertice = allocConnVertice();
+        headVertice->lastConnVertice->nextConnVertice->name = allocName(name);
+        strcpy(headVertice->lastConnVertice->nextConnVertice->name, name);
+        headVertice->lastConnVertice->nextConnVertice->weight = weight;
+
+        headVertice->lastConnVertice = headVertice->lastConnVertice->nextConnVertice;
     }
-
-    connVerticeToBeCreated = allocConnVertice();
-    connVerticeToBeCreated->name = allocName(name);
-    strcpy(connVerticeToBeCreated->name, name);
-    connVerticeToBeCreated->weight = weight;
-
     headVertice->connVerticesNum++;
-    headVertice->lastConnVertice = connVerticeToBeCreated;
-
 }
 
 
 void insertVerticeToGraph(Graph* graph, char* name) {
-    HeadVertice* headVerticeToBeCreated;
     if (graph->verticesNum == 0) {
-        // graph->firstVertice = allocHeadVertice();
-        // graph->firstVertice->name = allocName(name);
-        // strcpy(graph->firstVertice->name, name);
-
-        headVerticeToBeCreated = graph->firstVertice;
+        graph->firstVertice = allocHeadVertice();
+        graph->firstVertice->name = allocName(name);
+        strcpy(graph->firstVertice->name, name);
 
         // graph->verticesNum++;
-        // graph->lastVertice = graph->firstVertice;
+         graph->lastVertice = graph->firstVertice;
     } else {
-        headVerticeToBeCreated = graph->lastVertice->nextHeadVertice;
+        graph->lastVertice->nextHeadVertice = allocHeadVertice();
+        graph->lastVertice->nextHeadVertice->name = allocName(name);
+        strcpy(graph->firstVertice->name, name);
+
+        graph->lastVertice = graph->lastVertice->nextHeadVertice;
     }
 
-    headVerticeToBeCreated = allocHeadVertice();
-    headVerticeToBeCreated->name = allocName(name);
-    strcpy(headVerticeToBeCreated->name, name);
-
     graph->verticesNum++;
-    graph->lastVertice = headVerticeToBeCreated;
     printf("Vertice with name: %s was added successfully\n", name);
     return;
 }
