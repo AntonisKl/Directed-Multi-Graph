@@ -10,7 +10,7 @@ void handleFlags(int argc, char** argv, char* inputFileName, char* outputFileNam
                 inputFileName = argv[4];
                 outputFileName = argv[2];
             } else {
-                printf("Invalid flags\nExiting...");
+                printf("Invalid flags\nExiting...\n");
                 exit(1);
             }
         } else if (argc == 3) {
@@ -19,11 +19,11 @@ void handleFlags(int argc, char** argv, char* inputFileName, char* outputFileNam
             else if (strcmp(argv[1], "-o") == 0)
                 outputFileName = argv[2];
             else {
-                printf("Invalid flags\nExiting...");
+                printf("Invalid flags\nExiting...\n");
                 exit(1);
             }
         } else {
-            printf("Invalid flags\nExiting...");
+            printf("Invalid flags\nExiting...\n");
             exit(1);
         }
     }

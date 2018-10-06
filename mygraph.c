@@ -1,7 +1,8 @@
-#include "graph.c"
+#include "graph.h"
+#include "utils.h"
 
 int main(int argc, char** argv) {
-    char* inputFileName = NULL, outputFileName = NULL;
+    char* inputFileName = NULL, *outputFileName = NULL;
 
     handleFlags(argc, argv, inputFileName, outputFileName);
 

@@ -70,9 +70,8 @@ HeadVertice* findHeadVerticeInGraph(Graph* graph, char* name) {
     return curHeadVertice;
 }
 
-HeadVertice** find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2) {
+void find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2, HeadVertice* foundHeadVertices[2]) {
     HeadVertice *curHeadVertice1 = graph->firstVertice, *curHeadVertice2 = graph->firstVertice;
-    HeadVertice* foundHeadVertices[2];
     foundHeadVertices[0] = NULL;
     foundHeadVertices[1] = NULL;
 
@@ -104,13 +103,17 @@ HeadVertice** find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2) {
             }
 
             if (found1 == 1 && found2 == 1)
-                return NULL;
+            {
+                foundHeadVertices[0] = NULL;
+                foundHeadVertices[1] = NULL;
+                return;
+            }
 
             curHeadVertice1 = curHeadVertice1->nextHeadVertice;
             curHeadVertice2 = curHeadVertice2->nextHeadVertice;
         }
     }
-    return foundHeadVertices;
+    return;
 }
 
 void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned int weight) {
@@ -160,13 +163,17 @@ void insertVerticeToGraph(Graph* graph, char* name) {
 }
 
 void insertEdgeToGraph(Graph* graph, char* name1, char* name2, unsigned int weight) {
-    HeadVertice** foundHeadVertices = find2HeadVerticesInGraph(graph, name1, name2);
-    if (foundHeadVertices == NULL)
+    HeadVertice* foundHeadVertices[2];
+    find2HeadVerticesInGraph(graph, name1, name2, foundHeadVertices);
+    if (foundHeadVertices[0] == NULL && foundHeadVertices[1] == NULL)
         printf("Cannot connect two vertices with the same name");
     else {
         HeadVertice* headVerticeTarget = foundHeadVertices[0];
         if (foundHeadVertices[0] == NULL)
-            headVerticeTarget = insertVerticeToGraph(graph, name1);
+        {
+            insertVerticeToGraph(graph, name1);
+            headVerticeTarget = graph->lastVertice;
+        }
         else if (foundHeadVertices[1] == NULL)
             insertVerticeToGraph(graph, name2);
 

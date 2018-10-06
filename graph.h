@@ -39,7 +39,7 @@ void freeHeadVertice(HeadVertice* headVertice);
 void destroyGraph(Graph* graph);
 
 HeadVertice* findHeadVerticeInGraph(Graph* graph, char* name);
-HeadVertice** find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2);
+void find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2, HeadVertice* foundHeadVertices[2]);
 
 void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned int weight);
 void insertVerticeToGraph(Graph* graph, char* name);
