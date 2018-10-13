@@ -1,23 +1,25 @@
 #include "utils.h"
 
 // Function to remove all spaces from a given string
-void removeSpaces(char *str)
-{
+void removeSpaces(char* str) {
     // To keep track of non-space character count
+    if (str == NULL)
+        return;
+
     int count = 0;
     int stringSize = strlen(str);
     // printf("size: %d\n", stringSize);
 
     // Traverse the given string. If current character
     // is not space, then place it at index 'count++'
-    for (int i = 0; i < stringSize; i++)
-    {
-    // printf("%d\n", i);
+    for (int i = 0; i < stringSize; i++) {
+        // printf("%d\n", i);
         if (str[i] != ' ')
-            str[count++] = str[i]; // here count is
-                                   // incremented
+            str[count++] = str[i];  // here count is
+                                    // incremented
     }
     str[count] = '\0';
+    return;
     // printf("Spaces removed\n");
 }
 
@@ -64,19 +66,16 @@ char handleInput(char* input, Graph* graph) {
     // printf("%s\n", arguments);
     // if (arguments != NULL)
     //     removeSpaces(arguments);
-    if (arguments == NULL || strlen(arguments) == 0)
-    {
+    if (arguments == NULL || strlen(arguments) == 0) {
         if (command != 'e')
             printf("Wrong input, try again\n");
-        else
-        {
+        else {
             printf("Exiting...\n");
             return 1;
         }
-    }
-    else {
+    } else {
         printf("Got arguments\n");
-        char* arg1, *arg2, *arg3;
+        char *arg1, *arg2, *arg3;
         switch (command) {
             case 'i':
                 arg1 = strtok(arguments, "\n");
@@ -105,7 +104,19 @@ char handleInput(char* input, Graph* graph) {
                 }
                 insertEdgeToGraph(graph, arg1, arg2, weight);
                 break;
+            case 'd':
+                arg1 = strtok(arguments, "\n");
+                removeSpaces(arg1);
+                if (arg1 == NULL || strlen(arg1) == 0) {
+                    printf("Wrong input, try again\n");
+                    break;
+                }
+                deleteVerticeFromGraph(graph, arg1);
+                break;
 
+            case 'p':
+                printGraphVertices(graph);
+                break;
             // case 'e':
             //     exit(0);
             default:

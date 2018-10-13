@@ -16,6 +16,7 @@ typedef struct HeadVertice {
     ConnVertice* firstConnVertice;
     ConnVertice* lastConnVertice;
     struct HeadVertice* nextHeadVertice;
+    struct HeadVertice* prevHeadVertice;
     char* name;
     unsigned int connVerticesNum;
     char visited;
@@ -23,7 +24,7 @@ typedef struct HeadVertice {
 
 typedef struct Graph {
     HeadVertice* firstVertice;
-    HeadVertice* lastVertice; // just a pointer without malloc
+    HeadVertice* lastVertice;  // just a pointer without malloc
     unsigned int verticesNum;
     unsigned int edgesNum;
 } Graph;
@@ -38,11 +39,15 @@ void freeConnVertice(ConnVertice* connVertice);
 void freeHeadVertice(HeadVertice* headVertice);
 void destroyGraph(Graph* graph);
 
+void printGraphVertices(Graph* graph);
+
 HeadVertice* findHeadVerticeInGraph(Graph* graph, char* name);
 void find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2, HeadVertice* foundHeadVertices[2]);
 
 void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned int weight);
-void insertVerticeToGraph(Graph* graph, char* name);
+HeadVertice* insertVerticeToGraph(Graph* graph, char* name);
 void insertEdgeToGraph(Graph* graph, char* name1, char* name2, unsigned int weight);
+
+void deleteVerticeFromGraph(Graph* graph, char* name);
 
 #endif
