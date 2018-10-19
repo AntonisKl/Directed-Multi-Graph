@@ -113,6 +113,7 @@ char handleInput(char* input, Graph* graph) {
                 }
                 deleteVerticeFromGraph(graph, arg1);
                 break;
+                
 
             case 'p':
                 printGraphVertices(graph);

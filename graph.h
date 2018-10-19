@@ -7,6 +7,7 @@
 
 typedef struct ConnVertice {
     struct ConnVertice* nextConnVertice;
+    struct ConnVertice* prevConnVertice;
     char* name;
     unsigned int weight;
     char visited;
@@ -44,10 +45,15 @@ void printGraphVertices(Graph* graph);
 HeadVertice* findHeadVerticeInGraph(Graph* graph, char* name);
 void find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2, HeadVertice* foundHeadVertices[2]);
 
+ConnVertice* findEdgeInGraph(Graph* graph, HeadVertice* headVerticeFrom, char* nameTo, int weight);
+void findAndDeleteEdgesInGraph(Graph* graph, char* nameTo);
+
 void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned int weight);
 HeadVertice* insertVerticeToGraph(Graph* graph, char* name);
 void insertEdgeToGraph(Graph* graph, char* name1, char* name2, unsigned int weight);
 
 void deleteVerticeFromGraph(Graph* graph, char* name);
+
+void deleteEdgeFromGraph(Graph* graph, char* nameFrom, char* nameTo, int weight);
 
 #endif
