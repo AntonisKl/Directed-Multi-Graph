@@ -6,6 +6,11 @@
 #include <string.h>
 #include "graph.h"
 
+typedef struct VisitedNode {
+    char* name;
+    unsigned int weight;
+} VisitedNode;
+
 void removeSpaces(char *str);
 
 void handleFlags(int argc, char** argv, char* inputFileName, char* outputFileName);

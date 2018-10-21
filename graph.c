@@ -1,15 +1,30 @@
 #include "graph.h"
-
-HeadVertice* allocHeadVertice() {
-    return (HeadVertice*)malloc(sizeof(HeadVertice));
-}
-
-ConnVertice* allocConnVertice() {
-    return (ConnVertice*)malloc(sizeof(ConnVertice));
-}
+#include "stack.h"
+#include "utils.h"
 
 char* allocName(char* name) {
     return (char*)malloc(sizeof(name + 1));
+}
+
+HeadVertice* initHeadVertice(char* name) {
+    HeadVertice* headVertice = (HeadVertice*)malloc(sizeof(HeadVertice));
+    headVertice->visited = 0;
+    headVertice->firstConnVertice = NULL;
+    headVertice->lastConnVertice = NULL;
+    headVertice->prevHeadVertice = NULL;
+    headVertice->nextHeadVertice = NULL;
+    headVertice->name = allocName(name);
+    strcpy(headVertice->name, name);
+    return headVertice;
+}
+
+ConnVertice* initConnVertice(char* name) {
+    ConnVertice* connVertice = (ConnVertice*)malloc(sizeof(ConnVertice));
+    connVertice->prevConnVertice = NULL;
+    connVertice->nextConnVertice = NULL;
+    connVertice->name = allocName(name);
+    strcpy(connVertice->name, name);
+    return connVertice;
 }
 
 Graph* initGraph() {
@@ -58,15 +73,152 @@ void destroyGraph(Graph* graph) {
     return;
 }
 
-void printGraphVertices(Graph* graph) {
+void printGraph(Graph* graph) {
     HeadVertice* curHeadVertice = graph->firstVertice;
     while (curHeadVertice != NULL) {
-        printf("%s->", curHeadVertice->name);
+        printf("|%s|\n", curHeadVertice->name);
+
+        ConnVertice* curConnVertice = curHeadVertice->firstConnVertice;
+
+        while (curConnVertice != NULL) {
+            printf("\t%-4u->|%s|\n", curConnVertice->weight, curConnVertice->name);
+            curConnVertice = curConnVertice->nextConnVertice;
+        }
+
         curHeadVertice = curHeadVertice->nextHeadVertice;
     }
     printf("\n");
 
     return;
+}
+
+void printReceivingEdges(Graph* graph, char* nameTo) {
+    HeadVertice* curHeadVertice = graph->firstVertice;
+    char found = 0;
+    while (curHeadVertice != NULL) {
+        ConnVertice* curConnVertice = curHeadVertice->firstConnVertice;
+        while (curConnVertice != NULL) {
+            if (strcmp(curConnVertice->name, nameTo) == 0) {
+                if (found == 0) {
+                    printf("Rec-edges ");
+                    printf("|%s|->%u->|%s|\n", curHeadVertice->name, curConnVertice->weight, curConnVertice->name);
+                    found = 1;
+                } else
+                    printf("          |%s|->%u->|%s|\n", curHeadVertice->name, curConnVertice->weight, curConnVertice->name);
+            }
+
+            curConnVertice = curConnVertice->nextConnVertice;
+        }
+
+        curHeadVertice = curHeadVertice->nextHeadVertice;
+    }
+
+    if (found == 0)
+        printf("No-rec-edges %s\n\n", nameTo);
+    else
+        printf("\n");
+}
+
+void printSimpleCirclesOfNode(Graph* graph, char* name) {
+    HeadVertice* startingHeadVertice = findHeadVerticeInGraph(graph, name);
+
+    if (startingHeadVertice == NULL) {
+        printf("Vertice with name %s not found in graph\n", name);
+        return;
+    }
+
+    if (graph->verticesNum == 0) {
+        printf("graph is empty\n");
+        return;
+    }
+
+    Stack* stack = initStack(graph->verticesNum);
+    VisitedNode* visited[graph->verticesNum];
+    unsigned int i = 0;
+    for (i = 0; i < graph->verticesNum; i++)
+        visited[i] = NULL;
+
+    printf("1\n");
+    pushToStack(stack, startingHeadVertice, 0);
+    printf("2\n");
+
+    char simpleCircleFound = 0;
+    i = 0;
+    while (!stackIsEmpty(stack)) {
+        StackNode* poppedStackNode = NULL;
+        popFromStack(stack, &poppedStackNode);
+        printf("name: %s\n", poppedStackNode->headVertice->name);
+        printf("3\n");
+
+        if (poppedStackNode->headVertice->visited == 0) {
+            printf("4\n");
+
+            findHeadVerticeInGraph(graph, poppedStackNode->headVertice->name)->visited = 1;
+            printf("5\n");
+
+            visited[i] = (VisitedNode*)malloc(sizeof(VisitedNode));
+            visited[i]->name = allocName(poppedStackNode->headVertice->name);
+            printf("6\n");
+
+            strcpy(visited[i]->name, poppedStackNode->headVertice->name);
+            printf("7\n");
+
+            visited[i]->weight = poppedStackNode->weight;
+            i++;
+
+            ConnVertice* curConnVertice = poppedStackNode->headVertice->firstConnVertice;
+            while (curConnVertice != NULL) {
+                pushToStack(stack, findHeadVerticeInGraph(graph, curConnVertice->name), curConnVertice->weight);
+
+                curConnVertice = curConnVertice->nextConnVertice;
+            }
+            printf("8\n");
+
+            // poppedStackNode->
+        } else {
+            if (strcmp(poppedStackNode->headVertice->name, name) == 0) {
+                visited[i] = (VisitedNode*)malloc(sizeof(VisitedNode));
+                visited[i]->name = allocName(poppedStackNode->headVertice->name);
+                strcpy(visited[i]->name, poppedStackNode->headVertice->name);
+                visited[i]->weight = poppedStackNode->weight;
+
+                printf("Cir-found ");
+                for (i = 0; i < graph->verticesNum; i++) {
+                    if (visited[i] == NULL)
+                        break;
+
+                    if (visited[i + 1] != NULL)
+                        printf("|%s|->%u->", visited[i]->name, visited[i + 1]->weight);
+                    else
+                        printf("|%s|", visited[i]->name);
+                }
+                printf("\n");
+                simpleCircleFound = 1;
+                break;
+            }
+        }
+    }
+    printf("9\n");
+
+    if (simpleCircleFound == 0)
+        printf("No-circle-found |%s|\n", name);
+
+    for (i = 0; i < graph->verticesNum; i++) {
+        if (visited[i] != NULL) {
+            free(visited[i]->name);
+            free(visited[i]);
+        } else
+            break;
+    }
+    // free(visited);
+    printf("10\n");
+
+    // reset visited values
+    HeadVertice* curHeadVertice = graph->firstVertice;
+    while (curHeadVertice != NULL) {
+        curHeadVertice->visited = 0;
+        curHeadVertice = curHeadVertice->nextHeadVertice;
+    }
 }
 
 HeadVertice* findHeadVerticeInGraph(Graph* graph, char* name) {
@@ -90,7 +242,7 @@ void find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2, HeadVertic
 
     // printf("graph first vertice name: %s", graph->firstVertice->name);
 
-    char found1 = 0, found2 = 0, passed1= 0, passed2 = 0;
+    char found1 = 0, found2 = 0, passed1 = 0, passed2 = 0;
     while (curHeadVertice1 != NULL && curHeadVertice2 != NULL) {
         if (found1 == 1) {
             if (strcmp(curHeadVertice2->name, name2) == 0) {
@@ -124,7 +276,7 @@ void find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2, HeadVertic
                 passed2 = 1;  // actually vertice is not found, but set found2 = 1 just to speed up the process of search
 
             if (passed1 == 1 && passed2 == 1) {  // we passed the position where the vertices must have been
-                                               // (because list is sorted)
+                                                 // (because list is sorted)
                 foundHeadVertices[0] = NULL;
                 foundHeadVertices[1] = NULL;
                 return;
@@ -140,7 +292,7 @@ void find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2, HeadVertic
     return;
 }
 
-ConnVertice* findEdgeInGraph(Graph* graph, HeadVertice* headVerticeFrom, char* nameTo, int weight) {
+ConnVertice* findEdgeOfNode(Graph* graph, HeadVertice* headVerticeFrom, char* nameTo, unsigned int weight) {
     // if (graph->verticesNum == 0) {
     //     printf("Cannot search for edge in en empty graph\n");
     //     return NULL;
@@ -172,9 +324,13 @@ void findAndDeleteEdgesInGraph(Graph* graph, char* nameTo) {
     HeadVertice* curHeadVertice = graph->firstVertice;
 
     while (curHeadVertice != NULL) {
-        ConnVertice* foundEdge = findEdgeInGraph(graph, curHeadVertice, nameTo, -1);
+        ConnVertice* foundEdge = findEdgeOfNode(graph, curHeadVertice, nameTo, -1);
 
-        if (foundEdge != NULL) {
+        if (foundEdge == NULL)
+            printf("NULL\n");
+        else
+            printf("not null\n");
+        while (foundEdge != NULL) {
             if (foundEdge->prevConnVertice != NULL) {
                 if (foundEdge->nextConnVertice != NULL)
                     foundEdge->prevConnVertice->nextConnVertice = foundEdge->nextConnVertice;
@@ -198,6 +354,9 @@ void findAndDeleteEdgesInGraph(Graph* graph, char* nameTo) {
             free(foundEdge);
 
             curHeadVertice->connVerticesNum--;
+
+            printf("num: %d\n", curHeadVertice->connVerticesNum);
+            foundEdge = findEdgeOfNode(graph, curHeadVertice, nameTo, -1);
         }
 
         curHeadVertice = curHeadVertice->nextHeadVertice;
@@ -206,10 +365,7 @@ void findAndDeleteEdgesInGraph(Graph* graph, char* nameTo) {
 
 void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned int weight) {
     if (headVertice->connVerticesNum == 0) {
-        // headVertice->firstConnVertice = allocConnVertice();
-        headVertice->firstConnVertice = allocConnVertice();
-        headVertice->firstConnVertice->name = allocName(name);
-        strcpy(headVertice->firstConnVertice->name, name);
+        headVertice->firstConnVertice = initConnVertice(name);
         headVertice->firstConnVertice->weight = weight;
 
         headVertice->lastConnVertice = headVertice->firstConnVertice;
@@ -219,10 +375,8 @@ void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned 
         ConnVertice* curConnVertice = headVertice->firstConnVertice;
 
         if (strcmp(name, curConnVertice->name) < 0) {
-            ConnVertice* connVerticeToInsert = allocConnVertice();
+            ConnVertice* connVerticeToInsert = initConnVertice(name);
             connVerticeToInsert->nextConnVertice = curConnVertice;
-            connVerticeToInsert->name = allocName(name);
-            strcpy(connVerticeToInsert->name, name);
             connVerticeToInsert->weight = weight;
 
             curConnVertice->prevConnVertice = connVerticeToInsert;
@@ -234,11 +388,9 @@ void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned 
             while (curConnVertice != NULL) {
                 if (curConnVertice->nextConnVertice != NULL) {
                     if (strcmp(name, curConnVertice->nextConnVertice->name) < 0) {
-                        ConnVertice* connVerticeToInsert = allocConnVertice();
+                        ConnVertice* connVerticeToInsert = initConnVertice(name);
                         connVerticeToInsert->prevConnVertice = curConnVertice;
                         connVerticeToInsert->nextConnVertice = curConnVertice->nextConnVertice;
-                        connVerticeToInsert->name = allocName(name);
-                        strcpy(connVerticeToInsert->name, name);
                         connVerticeToInsert->weight = weight;
 
                         curConnVertice->nextConnVertice->prevConnVertice = connVerticeToInsert;
@@ -247,10 +399,8 @@ void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned 
                         return;
                     }
                 } else {
-                    headVertice->lastConnVertice->nextConnVertice = allocConnVertice();
+                    headVertice->lastConnVertice->nextConnVertice = initConnVertice(name);
                     headVertice->lastConnVertice->nextConnVertice->prevConnVertice = curConnVertice;
-                    headVertice->lastConnVertice->nextConnVertice->name = allocName(name);
-                    strcpy(headVertice->lastConnVertice->nextConnVertice->name, name);
                     headVertice->lastConnVertice->nextConnVertice->weight = weight;
 
                     headVertice->lastConnVertice = headVertice->lastConnVertice->nextConnVertice;
@@ -280,10 +430,10 @@ HeadVertice* insertVerticeToGraph(Graph* graph, char* name) {
         return NULL;
     }
 
+    printf("size: %d\n", graph->verticesNum);
+
     if (graph->verticesNum == 0) {
-        graph->firstVertice = allocHeadVertice();
-        graph->firstVertice->name = allocName(name);
-        strcpy(graph->firstVertice->name, name);
+        graph->firstVertice = initHeadVertice(name);
 
         graph->lastVertice = graph->firstVertice;
         graph->verticesNum++;
@@ -294,10 +444,8 @@ HeadVertice* insertVerticeToGraph(Graph* graph, char* name) {
         // insert at start
 
         if (strcmp(name, curHeadVertice->name) < 0) {
-            HeadVertice* headVerticeToInsert = allocHeadVertice();
+            HeadVertice* headVerticeToInsert = initHeadVertice(name);
             headVerticeToInsert->nextHeadVertice = curHeadVertice;
-            headVerticeToInsert->name = allocName(name);
-            strcpy(headVerticeToInsert->name, name);
 
             curHeadVertice->prevHeadVertice = headVerticeToInsert;
             graph->firstVertice = headVerticeToInsert;
@@ -308,11 +456,9 @@ HeadVertice* insertVerticeToGraph(Graph* graph, char* name) {
             while (curHeadVertice != NULL) {
                 if (curHeadVertice->nextHeadVertice != NULL) {
                     if (strcmp(name, curHeadVertice->nextHeadVertice->name) < 0) {
-                        HeadVertice* headVerticeToInsert = allocHeadVertice();
+                        HeadVertice* headVerticeToInsert = initHeadVertice(name);
                         headVerticeToInsert->prevHeadVertice = curHeadVertice;
                         headVerticeToInsert->nextHeadVertice = curHeadVertice->nextHeadVertice;
-                        headVerticeToInsert->name = allocName(name);
-                        strcpy(headVerticeToInsert->name, name);
 
                         curHeadVertice->nextHeadVertice->prevHeadVertice = headVerticeToInsert;
                         curHeadVertice->nextHeadVertice = headVerticeToInsert;
@@ -322,9 +468,7 @@ HeadVertice* insertVerticeToGraph(Graph* graph, char* name) {
                         return curHeadVertice->nextHeadVertice;
                     }
                 } else {
-                    graph->lastVertice->nextHeadVertice = allocHeadVertice();
-                    graph->lastVertice->nextHeadVertice->name = allocName(name);
-                    strcpy(graph->lastVertice->nextHeadVertice->name, name);
+                    graph->lastVertice->nextHeadVertice = initHeadVertice(name);
                     graph->lastVertice->nextHeadVertice->prevHeadVertice = curHeadVertice;
 
                     graph->lastVertice = graph->lastVertice->nextHeadVertice;
@@ -377,15 +521,17 @@ void deleteVerticeFromGraph(Graph* graph, char* name) {
     HeadVertice* headVerticeToDelete = findHeadVerticeInGraph(graph, name);
     printf("2\n");
     if (headVerticeToDelete != NULL) {
+        printf("edges num: %d\n", headVerticeToDelete->connVerticesNum);
         findAndDeleteEdgesInGraph(graph, headVerticeToDelete->name);
 
         if (headVerticeToDelete->firstConnVertice != NULL)
             freeConnVertice(headVerticeToDelete->firstConnVertice);
 
         if (headVerticeToDelete->prevHeadVertice != NULL) {
-            if (headVerticeToDelete->nextHeadVertice != NULL)
+            if (headVerticeToDelete->nextHeadVertice != NULL) {
                 headVerticeToDelete->prevHeadVertice->nextHeadVertice = headVerticeToDelete->nextHeadVertice;
-            else {  // is last head vertice
+                headVerticeToDelete->nextHeadVertice->prevHeadVertice = headVerticeToDelete->prevHeadVertice;
+            } else {  // is last head vertice
                 headVerticeToDelete->prevHeadVertice->nextHeadVertice = NULL;
                 graph->lastVertice = headVerticeToDelete->prevHeadVertice;
             }
@@ -402,6 +548,7 @@ void deleteVerticeFromGraph(Graph* graph, char* name) {
         free(headVerticeToDelete->name);
         // headVerticeToDelete->nextHeadVertice = NULL;
         free(headVerticeToDelete);
+        headVerticeToDelete = NULL;
 
         graph->verticesNum--;
     } else
@@ -410,25 +557,26 @@ void deleteVerticeFromGraph(Graph* graph, char* name) {
     return;
 }
 
-void deleteEdgeFromGraph(Graph* graph, char* nameFrom, char* nameTo, int weight) {
+char deleteEdgeFromGraph(Graph* graph, char* nameFrom, char* nameTo, unsigned int weight) {
     HeadVertice* headVerticeFrom = findHeadVerticeInGraph(graph, nameFrom);
 
     if (headVerticeFrom == NULL) {
         printf("Vertice with name \"%s\" not found in graph\n", nameFrom);
-        return;
+        return 1;
     }
 
-    ConnVertice* connVerticeToDelete = findEdgeInGraph(graph, headVerticeFrom, nameTo, weight);  // no weight comparison if weight == -1
+    ConnVertice* connVerticeToDelete = findEdgeOfNode(graph, headVerticeFrom, nameTo, weight);  // no weight comparison if weight == -1
 
     if (connVerticeToDelete == NULL) {
         printf("Edge not found in graph");
-        return;
+        return 1;
     }
 
     if (connVerticeToDelete->prevConnVertice != NULL) {
-        if (connVerticeToDelete->nextConnVertice != NULL)
+        if (connVerticeToDelete->nextConnVertice != NULL) {
             connVerticeToDelete->prevConnVertice->nextConnVertice = connVerticeToDelete->nextConnVertice;
-        else {  // is last conn vertice
+            connVerticeToDelete->nextConnVertice->prevConnVertice = connVerticeToDelete->prevConnVertice;
+        } else {  // is last conn vertice
             connVerticeToDelete->prevConnVertice->nextConnVertice = NULL;
             headVerticeFrom->lastConnVertice = connVerticeToDelete->prevConnVertice;
         }
@@ -446,6 +594,28 @@ void deleteEdgeFromGraph(Graph* graph, char* nameFrom, char* nameTo, int weight)
     free(connVerticeToDelete->name);
     // connVerticeToDelete->nextConnVertice = NULL;
     free(connVerticeToDelete);
+    connVerticeToDelete = NULL;
 
     headVerticeFrom->connVerticesNum--;
+    return 0;
+}
+
+char modifyEdgeOfGraph(Graph* graph, char* nameFrom, char* nameTo, unsigned int weightOld, unsigned int weightNew) {
+    HeadVertice* headVerticeFrom = findHeadVerticeInGraph(graph, nameFrom);
+
+    if (headVerticeFrom == NULL) {
+        printf("Vertice with name \"%s\" not found in graph\n", nameFrom);
+        return 1;
+    }
+
+    ConnVertice* connVerticeToModify = findEdgeOfNode(graph, headVerticeFrom, nameTo, weightOld);
+
+    if (connVerticeToModify == NULL) {
+        printf("Edge not found in graph");
+        return 1;
+    }
+
+    connVerticeToModify->weight = weightNew;
+
+    return 0;
 }

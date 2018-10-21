@@ -2,18 +2,16 @@
 #include "utils.h"
 
 int main(int argc, char** argv) {
-    char* inputFileName = NULL, *outputFileName = NULL;
+    char *inputFileName = NULL, *outputFileName = NULL;
 
     handleFlags(argc, argv, inputFileName, outputFileName);
     printf("Flags handled\n");
 
     Graph* graph;
     char input[50];
-    if (inputFileName != NULL)
-    {
+    if (inputFileName != NULL) {
         // read and create graph from input file (function)
-    } else
-    {
+    } else {
         graph = initGraph();
         printf("Graph created\n");
 

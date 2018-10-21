@@ -9,7 +9,7 @@ typedef struct ConnVertice {
     struct ConnVertice* nextConnVertice;
     struct ConnVertice* prevConnVertice;
     char* name;
-    unsigned int weight;
+    unsigned int weight; // cause it represents money
     char visited;
 } ConnVertice;
 
@@ -30,9 +30,9 @@ typedef struct Graph {
     unsigned int edgesNum;
 } Graph;
 
-HeadVertice* allocHeadVertice();
-ConnVertice* allocConnVertice();
 char* allocName(char* name);
+HeadVertice* initHeadVertice(char* name);
+ConnVertice* initConnVertice(char* name);
 
 Graph* initGraph();
 
@@ -40,12 +40,14 @@ void freeConnVertice(ConnVertice* connVertice);
 void freeHeadVertice(HeadVertice* headVertice);
 void destroyGraph(Graph* graph);
 
-void printGraphVertices(Graph* graph);
+void printGraph(Graph* graph);
+void printReceivingEdges(Graph* graph, char* nameTo);
+void printSimpleCirclesOfNode(Graph* graph, char* name);
 
 HeadVertice* findHeadVerticeInGraph(Graph* graph, char* name);
 void find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2, HeadVertice* foundHeadVertices[2]);
 
-ConnVertice* findEdgeInGraph(Graph* graph, HeadVertice* headVerticeFrom, char* nameTo, int weight);
+ConnVertice* findEdgeOfNode(Graph* graph, HeadVertice* headVerticeFrom, char* nameTo, unsigned int weight);
 void findAndDeleteEdgesInGraph(Graph* graph, char* nameTo);
 
 void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned int weight);
@@ -54,6 +56,9 @@ void insertEdgeToGraph(Graph* graph, char* name1, char* name2, unsigned int weig
 
 void deleteVerticeFromGraph(Graph* graph, char* name);
 
-void deleteEdgeFromGraph(Graph* graph, char* nameFrom, char* nameTo, int weight);
+char deleteEdgeFromGraph(Graph* graph, char* nameFrom, char* nameTo, unsigned int weight);
+
+char modifyEdgeOfGraph(Graph* graph, char* nameFrom, char* nameTo, unsigned int weightOld, unsigned int weightNew);
+
 
 #endif

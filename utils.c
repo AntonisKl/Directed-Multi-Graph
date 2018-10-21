@@ -75,7 +75,7 @@ char handleInput(char* input, Graph* graph) {
         }
     } else {
         printf("Got arguments\n");
-        char *arg1, *arg2, *arg3;
+        char *arg1, *arg2, *arg3, *arg4;
         switch (command) {
             case 'i':
                 arg1 = strtok(arguments, "\n");
@@ -97,9 +97,9 @@ char handleInput(char* input, Graph* graph) {
                     printf("Wrong input, try again\n");
                     break;
                 }
-                unsigned int weight = atoi(arg3);
-                if (weight == 0) {  // error in conversion
-                    printf("Wrong input, try again\n");
+                int weight = atoi(arg3);
+                if (weight <= 0) {  // error in conversion
+                    printf("Invalid weight input, try again\n");
                     break;
                 }
                 insertEdgeToGraph(graph, arg1, arg2, weight);
@@ -113,10 +113,77 @@ char handleInput(char* input, Graph* graph) {
                 }
                 deleteVerticeFromGraph(graph, arg1);
                 break;
-                
+            case 'l':
+                arg1 = strtok(arguments, " ");
+                removeSpaces(arg1);
+                arg2 = strtok(NULL, " ");
+                removeSpaces(arg2);
+                arg3 = strtok(NULL, "\n");
+                removeSpaces(arg3);
+                if (arg1 == NULL || arg2 == NULL || strlen(arg1) == 0 || strlen(arg2) == 0) {
+                    printf("Wrong input, try again\n");
+                    break;
+                }
+
+                if (arg3 == NULL || strlen(arg3) == 0) {
+                    while (deleteEdgeFromGraph(graph, arg1, arg2, -1) == 0)
+                        ;
+                } else {
+                    int weight = atoi(arg3);
+                    if (weight <= 0) {  // error in conversion
+                        printf("Invalid weight input, try again\n");
+                        break;
+                    }
+                    deleteEdgeFromGraph(graph, arg1, arg2, weight);
+                }
+                break;
+            case 'm':
+                arg1 = strtok(arguments, " ");
+                removeSpaces(arg1);
+                arg2 = strtok(NULL, " ");
+                removeSpaces(arg2);
+                arg3 = strtok(NULL, " ");
+                removeSpaces(arg3);
+                arg4 = strtok(NULL, "\n");
+                removeSpaces(arg4);
+                if (arg1 == NULL || arg2 == NULL || arg3 == NULL || arg4 == NULL || strlen(arg1) == 0 || strlen(arg2) == 0 || strlen(arg3) == 0 || strlen(arg4) == 0) {
+                    printf("Wrong input, try again\n");
+                    break;
+                }
+                int weightOld = atoi(arg3);
+                if (weightOld <= 0) {  // error in conversion
+                    printf("Invalid weight input, try again\n");
+                    break;
+                }
+                int weightNew = atoi(arg4);
+                if (weightNew <= 0) {  // error in conversion
+                    printf("Invalid weight input, try again\n");
+                    break;
+                }
+
+                modifyEdgeOfGraph(graph, arg1, arg2, weightOld, weightNew);
+                break;
+            case 'r':
+                arg1 = strtok(arguments, "\n");
+                removeSpaces(arg1);
+                if (arg1 == NULL || strlen(arg1) == 0) {
+                    printf("Wrong input, try again\n");
+                    break;
+                }
+                printReceivingEdges(graph, arg1);
+                break;
+            case 'c':
+                arg1 = strtok(arguments, "\n");
+                removeSpaces(arg1);
+                if (arg1 == NULL || strlen(arg1) == 0) {
+                    printf("Wrong input, try again\n");
+                    break;
+                }
+                printSimpleCirclesOfNode(graph, arg1);
+                break;
 
             case 'p':
-                printGraphVertices(graph);
+                printGraph(graph);
                 break;
             // case 'e':
             //     exit(0);
