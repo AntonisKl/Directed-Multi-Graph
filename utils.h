@@ -6,10 +6,11 @@
 #include <string.h>
 #include "graph.h"
 
-typedef struct VisitedNode {
+typedef struct PathNode {
+    char* nameFrom;
     char* name;
     unsigned int weight;
-} VisitedNode;
+} PathNode;
 
 void removeSpaces(char *str);
 

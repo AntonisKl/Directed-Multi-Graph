@@ -5,6 +5,7 @@
 
 typedef struct StackNode {
     HeadVertice* headVertice;
+    char* nameFrom;
     unsigned int weight;
 } StackNode;
 
@@ -24,9 +25,9 @@ char stackIsEmpty(Stack* stack);
 
 void copyHeadVertice(HeadVertice* to, HeadVertice* from);
 
-void pushToStack(Stack* stack, HeadVertice* headVertice, unsigned int weight);
+void pushToStack(Stack* stack, HeadVertice* headVertice, unsigned int weight, char* nameFrom);
 
-void popFromStack(Stack* stack, StackNode** poppedHeadVertice);
+void popFromStack(Stack* stack, StackNode** poppedStackNode);
 
 StackNode* peekFromStack(Stack* stack);
 
