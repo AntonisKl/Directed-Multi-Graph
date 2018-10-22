@@ -8,6 +8,19 @@ StackNode* createStackNode(HeadVertice* headVertice, unsigned int weight) {
     return stackNode;
 }
 
+void freeStackNode(StackNode* stackNode) {
+    free(stackNode->headVertice->name);
+    stackNode->headVertice->name = NULL;
+    free(stackNode->headVertice);
+    stackNode->headVertice = NULL;
+    if (stackNode->nameFrom != NULL) {
+        free(stackNode->nameFrom);
+        stackNode->nameFrom = NULL;
+    }
+    free(stackNode);
+    // stackNode = NULL;
+}
+
 Stack* initStack(unsigned int maxSize) {
     Stack* stack = (Stack*)malloc(sizeof(Stack));
     stack->stackNodes = (StackNode**)malloc(maxSize * sizeof(StackNode));
@@ -18,20 +31,20 @@ Stack* initStack(unsigned int maxSize) {
 }
 
 Stack* destroyStack(Stack* stack) {
-    // unsigned int i = 0;
-    // for (i = 0; i < stack->maxSize; i++) {
-    //     if (stack->stackNodes[i] != NULL) {
-    //         free(stack->stackNodes[i]->headVertice->name);
-    //         free(stack->stackNodes[i]->headVertice);
-    //         if (stack->stackNodes[i]->nameFrom != NULL)
-    //             free(stack->stackNodes[i]->nameFrom);
-
-    //         free(stack->stackNodes[i]);
-    //     }
-    // }
-
+    if (!stackIsEmpty(stack)) {
+        unsigned int i = 0;
+        for (i = 0; i < stack->size; i++) {
+            if (stack->stackNodes[i] != NULL) {
+                freeStackNode(stack->stackNodes[i]);
+                stack->stackNodes[i] = NULL;
+            }
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////// may need to set them to NULL after free
     free(stack->stackNodes);
+    stack->stackNodes = NULL;
     free(stack);
+    stack = NULL;
 }
 
 char stackIsEmpty(Stack* stack) {
@@ -94,6 +107,7 @@ void popFromStack(Stack* stack, StackNode** poppedStackNode) {
     printf("popped name: %s\n", stackNodeToBePopped->headVertice->name);
 
     (*poppedStackNode)->headVertice = initHeadVertice(stackNodeToBePopped->headVertice->name);
+    printf("in pop2.5\n");
     copyHeadVertice((*poppedStackNode)->headVertice, stackNodeToBePopped->headVertice);
 
     printf("in pop3\n");
@@ -109,21 +123,7 @@ void popFromStack(Stack* stack, StackNode** poppedStackNode) {
     (*poppedStackNode)->weight = stackNodeToBePopped->weight;
     printf("in pop5\n");
 
-    // free(stackNodeToBePopped->headVertice->name);
-    //     printf("in pop6\n");
-    stackNodeToBePopped->headVertice->name = NULL;
-    free(stackNodeToBePopped->headVertice);
-        printf("in pop7\n");
-    stackNodeToBePopped->headVertice = NULL;
-    if (stackNodeToBePopped->nameFrom != NULL) {
-        free(stackNodeToBePopped->nameFrom);
-        stackNodeToBePopped->nameFrom = NULL;
-    }
-        printf("in pop8\n");
-
-    free(stackNodeToBePopped);
-        printf("in pop9\n");
-
+    freeStackNode(stackNodeToBePopped);
     stackNodeToBePopped = NULL;
 
     printf("in pop10\n");

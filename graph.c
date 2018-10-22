@@ -132,12 +132,12 @@ void printSimpleCirclesOfNode(Graph* graph, char* name) {
         return;
     }
 
-    Stack* stack = initStack(graph->verticesNum);
-    PathNode* path[graph->verticesNum];
-    StackNode* poppedStackNodes[graph->verticesNum];
+    Stack* stack = initStack(graph->edgesNum);
+    // PathNode* path[graph->verticesNum];
+    StackNode* poppedStackNodes[graph->edgesNum];
     unsigned int i = 0;
-    for (i = 0; i < graph->verticesNum; i++) {
-        path[i] = NULL;
+    for (i = 0; i < graph->edgesNum; i++) {
+        // path[i] = NULL;
         poppedStackNodes[i] = NULL;
     }
 
@@ -148,6 +148,7 @@ void printSimpleCirclesOfNode(Graph* graph, char* name) {
     char simpleCircleFound = 0;
     i = 0;
 
+    ConnVertice* curConnVertice;
     while (!stackIsEmpty(stack)) {
         poppedStackNodes[i] = (StackNode*)malloc(sizeof(StackNode));
         popFromStack(stack, &poppedStackNodes[i]);
@@ -160,25 +161,25 @@ void printSimpleCirclesOfNode(Graph* graph, char* name) {
             findHeadVerticeInGraph(graph, poppedStackNodes[i]->headVertice->name)->visited = 1;
             printf("5\n");
 
-            ConnVertice* curConnVertice = poppedStackNodes[i]->headVertice->firstConnVertice;
+            curConnVertice = poppedStackNodes[i]->headVertice->firstConnVertice;
             printf("8\n");
             if (curConnVertice != NULL) {
                 printf("HELLO i: %d\n", i);
-                path[i] = (PathNode*)malloc(sizeof(PathNode));
-                path[i]->name = allocName(poppedStackNodes[i]->headVertice->name);
-                strcpy(path[i]->name, poppedStackNodes[i]->headVertice->name);
-                printf("0000000000000000000name will be pushed in path11111111111111111111111111111111: %s\n", path[0]->name);
+                // path[i] = (PathNode*)malloc(sizeof(PathNode));
+                // path[i]->name = allocName(poppedStackNodes[i]->headVertice->name);
+                // strcpy(path[i]->name, poppedStackNodes[i]->headVertice->name);
+                // printf("0000000000000000000name will be pushed in path11111111111111111111111111111111: %s\n", path[0]->name);
 
-                if (poppedStackNodes[i]->nameFrom != NULL) {
-                    path[i]->nameFrom = allocName(poppedStackNodes[i]->nameFrom);
-                    strcpy(path[i]->nameFrom, poppedStackNodes[i]->nameFrom);
-                } else
-                    path[i]->nameFrom = NULL;
-                printf("6\n");
+                // if (poppedStackNodes[i]->nameFrom != NULL) {
+                //     path[i]->nameFrom = allocName(poppedStackNodes[i]->nameFrom);
+                //     strcpy(path[i]->nameFrom, poppedStackNodes[i]->nameFrom);
+                // } else
+                //     path[i]->nameFrom = NULL;
+                // printf("6\n");
 
-                printf("7\n");
+                // printf("7\n");
 
-                path[i]->weight = poppedStackNodes[i]->weight;
+                // path[i]->weight = poppedStackNodes[i]->weight;
 
                 while (curConnVertice != NULL) {
                     pushToStack(stack, findHeadVerticeInGraph(graph, curConnVertice->name), curConnVertice->weight, poppedStackNodes[i]->headVertice->name);
@@ -186,9 +187,12 @@ void printSimpleCirclesOfNode(Graph* graph, char* name) {
                     curConnVertice = curConnVertice->nextConnVertice;
                 }
 
-                                printf("000000000000name will be pushed in path22222222222222222222222222222222: %s\n", path[0]->name);
+                // printf("000000000000name will be pushed in path22222222222222222222222222222222: %s\n", path[0]->name);
 
                 i++;
+            } else {
+                freeStackNode(poppedStackNodes[i]);
+                poppedStackNodes[i] = NULL;
             }
 
             printf("9\n");
@@ -212,19 +216,20 @@ void printSimpleCirclesOfNode(Graph* graph, char* name) {
                 printf("1\n");
                 unsigned int k = 0;
 
-                printf("name0 = %s\n", path[0]->name);
+                // printf("name0 = %s\n", path[0]->name);
                 for (int j = size - 1; j >= 0; j--) {
                     printf("j = %d\n", j);
-                    printf("nameLOOL: %s\n", path[j]->name);
-                    if (strcmp(path[j]->name, curNameFrom) == 0) {
-                        reversedPath[k].name = allocName(path[j]->name);
-                        strcpy(reversedPath[k].name, path[j]->name);
+                    printf("nameLOOL: %s\n", poppedStackNodes[j]->headVertice->name);
+                    if (strcmp(poppedStackNodes[j]->headVertice->name, curNameFrom) == 0) {
+                        reversedPath[k].name = allocName(poppedStackNodes[j]->headVertice->name);
+                        strcpy(reversedPath[k].name, poppedStackNodes[j]->headVertice->name);
                         if (j != 0) {
-                            reversedPath[k].nameFrom = allocName(path[j]->nameFrom);
-                            strcpy(reversedPath[k].nameFrom, path[j]->nameFrom);
-                        }
-                        reversedPath[k].weight = path[j]->weight;
-                        curNameFrom = path[j]->nameFrom;
+                            reversedPath[k].nameFrom = allocName(poppedStackNodes[j]->nameFrom);
+                            strcpy(reversedPath[k].nameFrom, poppedStackNodes[j]->nameFrom);
+                        } else
+                            reversedPath[k].nameFrom = NULL;
+                        reversedPath[k].weight = poppedStackNodes[j]->weight;
+                        curNameFrom = poppedStackNodes[j]->nameFrom;
                         k++;
                     }
                 }
@@ -239,6 +244,16 @@ void printSimpleCirclesOfNode(Graph* graph, char* name) {
                     printf("%u->|%s|->", correctPath[k]->weight, correctPath[k]->name);
                 }
                 printf("%u->|%s|\n", poppedStackNodes[i]->weight, poppedStackNodes[i]->headVertice->name);
+
+                for (int k = 0; k < actualSize; k++) {
+                    free(reversedPath[k].name);
+                    reversedPath[k].name =NULL;
+                    if (reversedPath[k].nameFrom != NULL)
+                    {
+                        free(reversedPath[k].nameFrom);
+                        reversedPath[k].nameFrom = NULL;
+                    }
+                }
                 simpleCircleFound = 1;
                 break;
             }
@@ -261,27 +276,24 @@ void printSimpleCirclesOfNode(Graph* graph, char* name) {
     if (simpleCircleFound == 0)
         printf("No-circle-found |%s|\n", name);
 
-    for (i = 0; i < graph->verticesNum; i++) {
-        printf("i: %d\n", i);
-        if (path[i] != NULL) {
-            if (path[i]->nameFrom != NULL)
-                free(path[i]->nameFrom);
-            // free(path[i]->name);
-            free(path[i]);
-        } else
-            break;
-    }
+    // for (i = 0; i < graph->verticesNum; i++) {
+    //     printf("i: %d\n", i);
+    //     if (path[i] != NULL) {
+    //         if (path[i]->nameFrom != NULL)
+    //             free(path[i]->nameFrom);
+    //         // free(path[i]->name);
+    //         free(path[i]);
+    //     } else
+    //         break;
+    // }
     printf("11\n");
 
-    for (i = 0; i < graph->verticesNum; i++) {
+    for (i = 0; i < graph->edgesNum; i++) {
         printf("i: %d\n", i);
 
         if (poppedStackNodes[i] != NULL) {
-            free(poppedStackNodes[i]->headVertice->name);
-            free(poppedStackNodes[i]->headVertice);
-            if (poppedStackNodes[i]->nameFrom != NULL)
-                free(poppedStackNodes[i]->nameFrom);
-            free(poppedStackNodes[i]);
+            freeStackNode(poppedStackNodes[i]);
+            poppedStackNodes[i] = NULL;
         } else
             break;
     }
@@ -434,6 +446,7 @@ void findAndDeleteEdgesInGraph(Graph* graph, char* nameTo) {
             free(foundEdge);
 
             curHeadVertice->connVerticesNum--;
+            graph->edgesNum--;
 
             printf("num: %d\n", curHeadVertice->connVerticesNum);
             foundEdge = findEdgeOfNode(graph, curHeadVertice, nameTo, -1);
@@ -591,6 +604,7 @@ void insertEdgeToGraph(Graph* graph, char* name1, char* name2, unsigned int weig
     }
 
     addConnVerticeToHeadVertice(headVerticeTarget, name2, weight);
+    graph->edgesNum++;
     printf("Edge from %s to %s with weight %u was successfully created\n", name1, name2, weight);
     // }
     return;

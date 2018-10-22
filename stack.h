@@ -18,6 +18,8 @@ typedef struct Stack {
 
 StackNode* createStackNode(HeadVertice* headVertice, unsigned int weight);
 
+void freeStackNode(StackNode* stackNode);
+
 Stack* initStack(unsigned int maxSize);
 Stack* destroyStack(Stack* stack);
 
