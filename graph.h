@@ -40,6 +40,8 @@ void freeConnVertice(ConnVertice* connVertice);
 void freeHeadVertice(HeadVertice* headVertice);
 void destroyGraph(Graph* graph);
 
+void resetVisitedReceivingEdges(Graph* graph, char* nameTo);
+
 void printGraph(Graph* graph);
 void printReceivingEdges(Graph* graph, char* nameTo);
 void printSimpleCirclesOfNode(Graph* graph, char* name);

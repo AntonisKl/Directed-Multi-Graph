@@ -13,10 +13,16 @@ void freeStackNode(StackNode* stackNode) {
     stackNode->headVertice->name = NULL;
     free(stackNode->headVertice);
     stackNode->headVertice = NULL;
-    if (stackNode->nameFrom != NULL) {
-        free(stackNode->nameFrom);
-        stackNode->nameFrom = NULL;
+    if (stackNode->headVerticeFrom != NULL) {
+        free(stackNode->headVerticeFrom->name);
+        stackNode->headVerticeFrom->name = NULL;
+        free(stackNode->headVerticeFrom);
+        stackNode->headVerticeFrom = NULL;
     }
+    // if (stackNode->nameFrom != NULL) {
+    //     free(stackNode->nameFrom);
+    //     stackNode->nameFrom = NULL;
+    // }
     free(stackNode);
     // stackNode = NULL;
 }
@@ -40,11 +46,9 @@ Stack* destroyStack(Stack* stack) {
             }
         }
     }
-    //////////////////////////////////////////////////////////////////////////// may need to set them to NULL after free
     free(stack->stackNodes);
     stack->stackNodes = NULL;
     free(stack);
-    stack = NULL;
 }
 
 char stackIsEmpty(Stack* stack) {
@@ -60,34 +64,56 @@ void copyHeadVertice(HeadVertice* to, HeadVertice* from) {
     // strcpy(to->name, from->name);
 }
 
-void pushToStack(Stack* stack, HeadVertice* headVertice, unsigned int weight, char* nameFrom) {
+void pushToStack(Stack* stack, HeadVertice* headVertice, unsigned int weight, HeadVertice* headVerticeFrom) {
     if (stack->size >= stack->maxSize) {
         printf("Stack is full\n");
         return;
     }
-    printf("a\n");
-    HeadVertice* headVerticeToBePushed = initHeadVertice(headVertice->name);
-    printf("b\n");
-
-    copyHeadVertice(headVerticeToBePushed, headVertice);
-    printf("c, %u\n", stack->size);
 
     stack->stackNodes[stack->size] = (StackNode*)malloc(sizeof(StackNode));
-    printf("d\n");
 
-    if (nameFrom != NULL) {
-        stack->stackNodes[stack->size]->nameFrom = allocName(nameFrom);
-        strcpy(stack->stackNodes[stack->size]->nameFrom, nameFrom);
-    } else
-        stack->stackNodes[stack->size]->nameFrom = NULL;
-    printf("e\n");
+    //printf("a\n");
+    HeadVertice* headVerticeToBePushed = initHeadVertice(headVertice->name);
+    //printf("b\n");
+
+    copyHeadVertice(headVerticeToBePushed, headVertice);
+    //printf("c, %u\n", stack->size);
+
+    HeadVertice* headVerticeFromToBePushed = NULL;
+    if (headVerticeFrom != NULL) {
+        headVerticeFromToBePushed = initHeadVertice(headVerticeFrom->name);
+        copyHeadVertice(headVerticeFromToBePushed, headVerticeFrom);
+    }
+
+    //printf("d\n");
+
+    //printf("e\n");
 
     stack->stackNodes[stack->size]->headVertice = headVerticeToBePushed;
+    stack->stackNodes[stack->size]->headVerticeFrom = headVerticeFromToBePushed;
     stack->stackNodes[stack->size]->weight = weight;
-    printf("byteSize push: %lu\n", sizeof(stack->stackNodes[stack->size]));
+    //printf("byteSize push: %lu\n", sizeof(stack->stackNodes[stack->size]));
 
+    if (headVerticeFromToBePushed != NULL)
+        printf("name1: %s\n", headVerticeFromToBePushed->name);
+
+    printf("Pushed node in stack--> ");
+    if (stack->stackNodes[stack->size]->headVerticeFrom != NULL)
+        printf("nameFrom: %s ", stack->stackNodes[stack->size]->headVerticeFrom->name);
+    printf("name: %s, weight: %u\n", stack->stackNodes[stack->size]->headVertice->name, stack->stackNodes[stack->size]->weight);
+
+    if (stack->stackNodes[stack->size]->headVerticeFrom != NULL) {
+        printf("edges (nameFrom): ");
+
+        ConnVertice* curConnVertice = stack->stackNodes[stack->size]->headVerticeFrom->firstConnVertice;
+        while (curConnVertice != NULL) {
+            printf("{|%s|, %u}, ", curConnVertice->name, curConnVertice->weight);
+            curConnVertice = curConnVertice->nextConnVertice;
+        }
+        printf("\n");
+    }
     stack->size++;
-    printf("name1: %s\n", headVerticeToBePushed->name);
+
     return;
 }
 
@@ -96,37 +122,58 @@ void popFromStack(Stack* stack, StackNode** poppedStackNode) {
         printf("Stack is empty\n");
         return;
     }
-    printf("in pop\n");
+    //printf("in pop\n");
     // (poppedStackNode) = (StackNode*)malloc(sizeof(StackNode));
-    printf("in pop1\n");
+    //printf("in pop1\n");
 
     StackNode* stackNodeToBePopped = stack->stackNodes[stack->size - 1];
-    printf("byteSize pop: %lu\n", sizeof(stackNodeToBePopped));
-    printf("in pop2\n");
+    //printf("byteSize pop: %lu\n", sizeof(stackNodeToBePopped));
+    //printf("in pop2\n");
 
-    printf("popped name: %s\n", stackNodeToBePopped->headVertice->name);
+    //printf("popped name: %s\n", stackNodeToBePopped->headVertice->name);
 
     (*poppedStackNode)->headVertice = initHeadVertice(stackNodeToBePopped->headVertice->name);
-    printf("in pop2.5\n");
+    //printf("in pop2.5\n");
     copyHeadVertice((*poppedStackNode)->headVertice, stackNodeToBePopped->headVertice);
 
-    printf("in pop3\n");
+    //printf("in pop3\n");
 
-    if (stackNodeToBePopped->nameFrom != NULL) {
-        (*poppedStackNode)->nameFrom = allocName(stackNodeToBePopped->nameFrom);
-        strcpy((*poppedStackNode)->nameFrom, stackNodeToBePopped->nameFrom);
+    if (stackNodeToBePopped->headVerticeFrom != NULL) {
+        //printf("pop3.1\n");
+        (*poppedStackNode)->headVerticeFrom = initHeadVertice(stackNodeToBePopped->headVerticeFrom->name);
+        copyHeadVertice((*poppedStackNode)->headVerticeFrom, stackNodeToBePopped->headVerticeFrom);
+    } else {
+        //printf("pop3.2\n");
+        (*poppedStackNode)->headVerticeFrom = NULL;
     }
-    printf("aaaaaaaaaaaaaaa: %s\n", (*poppedStackNode)->headVertice->name);
 
-    printf("in pop4\n");
+    //printf("aaaaaaaaaaaaaaa: %s\n", (*poppedStackNode)->headVertice->name);
+
+    //printf("in pop4\n");
 
     (*poppedStackNode)->weight = stackNodeToBePopped->weight;
-    printf("in pop5\n");
+    //printf("in pop5\n");
 
     freeStackNode(stackNodeToBePopped);
     stackNodeToBePopped = NULL;
 
-    printf("in pop10\n");
+    printf("Popped node from stack--> ");
+    if ((*poppedStackNode)->headVerticeFrom != NULL)
+        printf("nameFrom: %s ", (*poppedStackNode)->headVerticeFrom->name);
+    printf("name: %s, weight: %u\n", (*poppedStackNode)->headVertice->name, (*poppedStackNode)->weight);
+
+    if ((*poppedStackNode)->headVerticeFrom != NULL) {
+        printf("edges (nameFrom): ");
+
+        ConnVertice* curConnVertice = (*poppedStackNode)->headVerticeFrom->firstConnVertice;
+        while (curConnVertice != NULL) {
+            printf("{|%s|, %u}, ", curConnVertice->name, curConnVertice->weight);
+            curConnVertice = curConnVertice->nextConnVertice;
+        }
+        printf("\n");
+    }
+
+    //printf("in pop10\n");
     stack->size--;
     // return stackNodeToBePopped;
     // return stack->stackNodes[stack->size];
