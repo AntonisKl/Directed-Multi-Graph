@@ -1,0 +1,160 @@
+i Bot_1
+i Bot_2
+i Bot_3
+i Bot_4
+i Bot_5
+i Bot_6
+i Bot_7
+i Bot_8
+i Bot_9
+i Bot_10
+i Bot_11
+i Bot_12
+i Bot_13
+i Bot_14
+i Bot_15
+i Bot_16
+n Jeffery_Walters Shawn_Ford 2801
+n Lina_Bennett Bot_17 293
+n Bot_3 Marion_Beck 881
+n Bot_12 Leonard_Reeves 1161
+n Jeffery_Walters Bot_15 2044
+n Bot_18 Bot_19 4576
+n Bot_4 Ola_Rios 1639
+n Hulda_Zimmerman Lina_Bennett 1760
+n Bot_6 Todd_Park 2560
+n Bot_20 Bot_2 776
+n Bernice_Gross Todd_Park 614
+n Bot_5 Alvin_Perkins 3854
+n Bot_3 Bot_17 570
+n Bot_20 Bot_7 1341
+n Bot_12 Bot_21 891
+n Bot_22 Bot_23 4819
+n Bot_13 Alvin_Perkins 2222
+n Bot_11 Bot_16 4331
+n Bot_24 Bot_23 4779
+n Bot_11 Bot_5 521
+c Hulda_Zimmerman
+f Hulda_Zimmerman 300
+c Lina_Bennett
+f Lina_Bennett 300
+c Alvin_Perkins
+f Alvin_Perkins 300
+c Todd_Park
+f Todd_Park 200
+c Josie_Burke
+f Josie_Burke 340
+f Josie_Burke 200
+f Josie_Burke 110
+c Dean_Fields
+f Dean_Fields 241
+c Emilie_Horton
+f Emilie_Horton 100
+f Emilie_Horton 104
+c Marcus_Duncan
+f Marcus_Duncan 200
+f Marcus_Duncan 113
+c Myra_Burke
+f Myra_Burke 113
+c Leonard_Reeves
+f Leonard_Reeves 113
+c Janie_Warner
+f Janie_Warner 1
+c Ola_Rios
+f Ola_Rios 103
+c Bernice_Gross
+f Bernice_Gross 1
+c Tom_Casey
+f Tom_Casey 113
+c Jeffery_Walters
+c Jack_Hawkins
+f Jack_Hawkins 110
+c Shawn_Ford
+f Shawn_Ford 113
+c Irene_Weaver
+f Irene_Weaver 1
+c Jim_Johnston
+f Jim_Johnston 114
+c Marion_Beck
+f Marion_Beck 1
+m Alvin_Perkins Marcus_Duncan 779 3226
+m Hulda_Zimmerman Irene_Weaver 627 3192
+m Jim_Johnston Leonard_Reeves 945 2709
+m Marion_Beck Jim_Johnston 95 1653
+m Hulda_Zimmerman Ola_Rios 849 3031
+m Bot_3 Bot_17 570 920
+m Bot_4 Ola_Rios 1639 149
+m Bot_3 Bot_17 920 4572
+m Shawn_Ford Emilie_Horton 100 44
+m Josie_Burke Jack_Hawkins 514 4432
+r Hulda_Zimmerman
+r Lina_Bennett
+r Alvin_Perkins
+r Todd_Park
+r Josie_Burke
+r Dean_Fields
+r Emilie_Horton
+t Hulda_Zimmerman Lina_Bennett 5
+t Shawn_Ford Lina_Bennett 1
+t Alvin_Perkins Josie_Burke 5
+t Josie_Burke Emilie_Horton 5
+t Dean_Fields Emilie_Horton 4
+l Myra_Burke Ola_Rios 589
+l Shawn_Ford Bernice_Gross 889
+l Todd_Park Janie_Warner 125
+l Hulda_Zimmerman Ola_Rios 3031
+l Jack_Hawkins Josie_Burke 102
+l Alvin_Perkins Marcus_Duncan 755
+l Marcus_Duncan Ola_Rios 389
+l Josie_Burke Jack_Hawkins 4432
+l Bot_24 Bot_23 4779
+l Leonard_Reeves Myra_Burke 867
+l Bot_5 Alvin_Perkins 3854
+l Leonard_Reeves Dean_Fields 113
+l Marcus_Duncan Alvin_Perkins 838
+l Jeffery_Walters Shawn_Ford 2801
+l Hulda_Zimmerman Myra_Burke 489
+l Jeffery_Walters Tom_Casey 119
+l Bot_3 Bot_17 4572
+l Shawn_Ford Bernice_Gross 701
+l Shawn_Ford Leonard_Reeves 27
+l Todd_Park Dean_Fields 706
+m Shawn_Ford Josie_Burke 29 3040
+m Shawn_Ford Ola_Rios 2 2785
+m Hulda_Zimmerman Lina_Bennett 1760 3184
+m Bot_22 Bot_23 4819 4175
+m Hulda_Zimmerman Irene_Weaver 3192 2278
+m Shawn_Ford Alvin_Perkins 341 4974
+m Myra_Burke Ola_Rios 13 3820
+m Bot_22 Bot_23 4175 3721
+m Jeffery_Walters Bot_15 2044 3039
+m Irene_Weaver Shawn_Ford 596 427
+d Jack_Hawkins
+d Myra_Burke
+d Jim_Johnston
+d Bot_21
+d Bot_17
+d Hulda_Zimmerman
+m Dean_Fields Josie_Burke 916 1934
+m Bot_13 Alvin_Perkins 2222 3500
+m Bot_11 Bot_5 521 3200
+m Shawn_Ford Todd_Park 241 3281
+m Shawn_Ford Todd_Park 3281 3076
+m Shawn_Ford Alvin_Perkins 4974 3391
+m Bot_13 Alvin_Perkins 3500 4788
+m Bot_13 Alvin_Perkins 4788 1495
+m Alvin_Perkins Ola_Rios 859 1117
+m Bot_13 Alvin_Perkins 1495 1696
+r Hulda_Zimmerman
+r Lina_Bennett
+r Alvin_Perkins
+r Todd_Park
+r Josie_Burke
+r Dean_Fields
+r Emilie_Horton
+t Hulda_Zimmerman Lina_Bennett 5
+t Shawn_Ford Lina_Bennett 1
+t Alvin_Perkins Josie_Burke 10
+t Josie_Burke Emilie_Horton 10
+t Dean_Fields Emilie_Horton 10
+e

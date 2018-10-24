@@ -1,23 +1,23 @@
 #include "stack.h"
 
-StackNode* createStackNode(HeadVertice* headVertice, unsigned int weight) {
+StackNode* createStackNode(Vertice* vertice, unsigned int weight) {
     StackNode* stackNode = (StackNode*)malloc(sizeof(StackNode));
-    stackNode->headVertice = headVertice;
+    stackNode->vertice = vertice;
     stackNode->weight = weight;
 
     return stackNode;
 }
 
 void freeStackNode(StackNode* stackNode) {
-    free(stackNode->headVertice->name);
-    stackNode->headVertice->name = NULL;
-    free(stackNode->headVertice);
-    stackNode->headVertice = NULL;
-    if (stackNode->headVerticeFrom != NULL) {
-        free(stackNode->headVerticeFrom->name);
-        stackNode->headVerticeFrom->name = NULL;
-        free(stackNode->headVerticeFrom);
-        stackNode->headVerticeFrom = NULL;
+    free(stackNode->vertice->name);
+    stackNode->vertice->name = NULL;
+    free(stackNode->vertice);
+    stackNode->vertice = NULL;
+    if (stackNode->verticeFrom != NULL) {
+        free(stackNode->verticeFrom->name);
+        stackNode->verticeFrom->name = NULL;
+        free(stackNode->verticeFrom);
+        stackNode->verticeFrom = NULL;
     }
     free(stackNode);
 }
@@ -50,15 +50,15 @@ char stackIsEmpty(Stack* stack) {
     return stack->size == 0;
 }
 
-void copyHeadVertice(HeadVertice* to, HeadVertice* from) {
+void copyVertice(Vertice* to, Vertice* from) {
     to->visited = from->visited;
-    to->firstConnVertice = from->firstConnVertice;
-    to->lastConnVertice = from->lastConnVertice;
-    to->prevHeadVertice = from->prevHeadVertice;
-    to->nextHeadVertice = from->nextHeadVertice;
+    to->firstEdge = from->firstEdge;
+    to->lastEdge = from->lastEdge;
+    to->prevVertice = from->prevVertice;
+    to->nextVertice = from->nextVertice;
 }
 
-void pushToStack(Stack* stack, HeadVertice* headVertice, unsigned int weight, HeadVertice* headVerticeFrom) {
+void pushToStack(Stack* stack, Vertice* vertice, unsigned int weight, Vertice* verticeFrom) {
     if (stack->size >= stack->maxSize) {
         printf("Stack is full\n");
         return;
@@ -66,18 +66,18 @@ void pushToStack(Stack* stack, HeadVertice* headVertice, unsigned int weight, He
 
     stack->stackNodes[stack->size] = (StackNode*)malloc(sizeof(StackNode));
 
-    HeadVertice* headVerticeToBePushed = initHeadVertice(headVertice->name);
+    Vertice* verticeToBePushed = initVertice(vertice->name);
 
-    copyHeadVertice(headVerticeToBePushed, headVertice);
+    copyVertice(verticeToBePushed, vertice);
 
-    HeadVertice* headVerticeFromToBePushed = NULL;
-    if (headVerticeFrom != NULL) {
-        headVerticeFromToBePushed = initHeadVertice(headVerticeFrom->name);
-        copyHeadVertice(headVerticeFromToBePushed, headVerticeFrom);
+    Vertice* verticeFromToBePushed = NULL;
+    if (verticeFrom != NULL) {
+        verticeFromToBePushed = initVertice(verticeFrom->name);
+        copyVertice(verticeFromToBePushed, verticeFrom);
     }
 
-    stack->stackNodes[stack->size]->headVertice = headVerticeToBePushed;
-    stack->stackNodes[stack->size]->headVerticeFrom = headVerticeFromToBePushed;
+    stack->stackNodes[stack->size]->vertice = verticeToBePushed;
+    stack->stackNodes[stack->size]->verticeFrom = verticeFromToBePushed;
     stack->stackNodes[stack->size]->weight = weight;
     stack->size++;
 
@@ -92,14 +92,14 @@ void popFromStack(Stack* stack, StackNode** poppedStackNode) {
 
     StackNode* stackNodeToBePopped = stack->stackNodes[stack->size - 1];
 
-    (*poppedStackNode)->headVertice = initHeadVertice(stackNodeToBePopped->headVertice->name);
-    copyHeadVertice((*poppedStackNode)->headVertice, stackNodeToBePopped->headVertice);
+    (*poppedStackNode)->vertice = initVertice(stackNodeToBePopped->vertice->name);
+    copyVertice((*poppedStackNode)->vertice, stackNodeToBePopped->vertice);
 
-    if (stackNodeToBePopped->headVerticeFrom != NULL) {
-        (*poppedStackNode)->headVerticeFrom = initHeadVertice(stackNodeToBePopped->headVerticeFrom->name);
-        copyHeadVertice((*poppedStackNode)->headVerticeFrom, stackNodeToBePopped->headVerticeFrom);
+    if (stackNodeToBePopped->verticeFrom != NULL) {
+        (*poppedStackNode)->verticeFrom = initVertice(stackNodeToBePopped->verticeFrom->name);
+        copyVertice((*poppedStackNode)->verticeFrom, stackNodeToBePopped->verticeFrom);
     } else 
-        (*poppedStackNode)->headVerticeFrom = NULL;
+        (*poppedStackNode)->verticeFrom = NULL;
 
 
     (*poppedStackNode)->weight = stackNodeToBePopped->weight;

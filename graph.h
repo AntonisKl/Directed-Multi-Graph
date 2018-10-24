@@ -5,56 +5,63 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct ConnVertice {
-    struct ConnVertice* nextConnVertice;
-    struct ConnVertice* prevConnVertice;
-    char* name;
-    unsigned int weight; // cause it represents money
-    char visited;
-} ConnVertice;
+// Comments: 
+// - the Graph has a double linked list for its Vertices and a double linked list for the Edges of each of the Vertices
+// - Vertices are sorted for fast search
+// - Edges are sorted for fast search
+// - the Graph has a head and last pointer for its Vertices
+// - each Vertice has a head and last pointer for its Edges
 
-typedef struct HeadVertice {
-    ConnVertice* firstConnVertice;
-    ConnVertice* lastConnVertice;
-    struct HeadVertice* nextHeadVertice;
-    struct HeadVertice* prevHeadVertice;
+typedef struct Edge {
+    struct Edge* nextEdge;
+    struct Edge* prevEdge;
     char* name;
-    unsigned int connVerticesNum;
+    unsigned int weight; // unsigned int because it represents money
     char visited;
-} HeadVertice;
+} Edge;
+
+typedef struct Vertice {
+    Edge* firstEdge;
+    Edge* lastEdge;
+    struct Vertice* nextVertice;
+    struct Vertice* prevVertice;
+    char* name;
+    unsigned int edgesNum;
+    char visited;
+} Vertice;
 
 typedef struct Graph {
-    HeadVertice* firstVertice;
-    HeadVertice* lastVertice;  // just a pointer without malloc
+    Vertice* firstVertice;
+    Vertice* lastVertice;
     unsigned int verticesNum;
     unsigned int edgesNum;
 } Graph;
 
 char* allocName(char* name);
-HeadVertice* initHeadVertice(char* name);
-ConnVertice* initConnVertice(char* name);
+Vertice* initVertice(char* name);
+Edge* initEdge(char* name);
 
 Graph* initGraph();
 
-void freeConnVertice(ConnVertice* connVertice);
-void freeHeadVertice(HeadVertice* headVertice);
+void freeEdge(Edge* edge);
+void freeVertice(Vertice* vertice);
 void destroyGraph(Graph* graph);
 
 void resetVisitedReceivingEdges(Graph* graph, char* nameTo);
 
 void printGraph(Graph* graph, char* out);
 void printReceivingEdges(Graph* graph, char* nameTo);
-void printSimpleCirclesOfNode(Graph* graph, char* name);
-void printAllCirclesOfNode(Graph* graph, char* name, unsigned int minWeight);
+void printSimpleCirclesOfVertice(Graph* graph, char* name);
+void printAllCirclesOfVertice(Graph* graph, char* name, unsigned int minWeight);
 
-HeadVertice* findHeadVerticeInGraph(Graph* graph, char* name);
-void find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2, HeadVertice* foundHeadVertices[2]);
+Vertice* findVerticeInGraph(Graph* graph, char* name);
+void find2VerticesInGraph(Graph* graph, char* name1, char* name2, Vertice* foundVertices[2]);
 
-ConnVertice* findEdgeOfNode(Graph* graph, HeadVertice* headVerticeFrom, char* nameTo, unsigned int weight);
+Edge* findEdgeOfVertice(Graph* graph, Vertice* verticeFrom, char* nameTo, unsigned int weight);
 void findAndDeleteEdgesInGraph(Graph* graph, char* nameTo);
 
-void addConnVerticeToHeadVertice(HeadVertice* headVertice, char* name, unsigned int weight);
-HeadVertice* insertVerticeToGraph(Graph* graph, char* name);
+void addEdgeToVertice(Vertice* vertice, char* name, unsigned int weight);
+Vertice* insertVerticeToGraph(Graph* graph, char* name);
 void insertEdgeToGraph(Graph* graph, char* name1, char* name2, unsigned int weight);
 
 void deleteVerticeFromGraph(Graph* graph, char* name);
@@ -63,5 +70,6 @@ char deleteEdgeFromGraph(Graph* graph, char* nameFrom, char* nameTo, unsigned in
 
 char modifyEdgeOfGraph(Graph* graph, char* nameFrom, char* nameTo, unsigned int weightOld, unsigned int weightNew);
 
+void traceFlow(Graph* graph, char* nameFrom, char* nameTo, unsigned int pathLength);
 
 #endif

@@ -4,8 +4,8 @@
 #include "graph.h"
 
 typedef struct StackNode {
-    HeadVertice* headVertice;
-    HeadVertice* headVerticeFrom;
+    Vertice* vertice;
+    Vertice* verticeFrom;
     unsigned int weight;
 } StackNode;
 
@@ -16,7 +16,7 @@ typedef struct Stack {
     StackNode** stackNodes;
 } Stack;
 
-StackNode* createStackNode(HeadVertice* headVertice, unsigned int weight);
+StackNode* createStackNode(Vertice* vertice, unsigned int weight);
 
 void freeStackNode(StackNode* stackNode);
 
@@ -25,9 +25,9 @@ Stack* destroyStack(Stack* stack);
 
 char stackIsEmpty(Stack* stack);
 
-void copyHeadVertice(HeadVertice* to, HeadVertice* from);
+void copyVertice(Vertice* to, Vertice* from);
 
-void pushToStack(Stack* stack, HeadVertice* headVertice, unsigned int weight, HeadVertice* headVerticeFrom);
+void pushToStack(Stack* stack, Vertice* vertice, unsigned int weight, Vertice* verticeFrom);
 void popFromStack(Stack* stack, StackNode** poppedStackNode);
 
 StackNode* peekFromStack(Stack* stack);

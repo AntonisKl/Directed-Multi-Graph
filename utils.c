@@ -170,7 +170,7 @@ char handleInput(char* input, Graph* graph) {
                     printf("Wrong input, try again\n");
                     break;
                 }
-                printSimpleCirclesOfNode(graph, arg1);
+                printSimpleCirclesOfVertice(graph, arg1);
                 break;
             case 'f':
                 arg1 = strtok(arguments, " ");
@@ -186,7 +186,25 @@ char handleInput(char* input, Graph* graph) {
                     printf("Invalid weight input, try again\n");
                     break;
                 }
-                printAllCirclesOfNode(graph, arg1, minWeight);
+                printAllCirclesOfVertice(graph, arg1, minWeight);
+                break;
+            case 't':
+                arg1 = strtok(arguments, " ");
+                removeSpaces(arg1);
+                arg2 = strtok(NULL, " ");
+                removeSpaces(arg2);
+                arg3 = strtok(NULL, "\n");
+                removeSpaces(arg3);
+                if (arg1 == NULL || arg2 == NULL || strlen(arg1) == 0 || strlen(arg2) == 0) {
+                    printf("Wrong input, try again\n");
+                    break;
+                }
+                int l = atoi(arg3);
+                if (l <= 0) {  // error in conversion
+                    printf("Invalid max length input, try again\n");
+                    break;
+                }
+                traceFlow(graph, arg1, arg2, (unsigned int) l);
                 break;
 
             case 'p':

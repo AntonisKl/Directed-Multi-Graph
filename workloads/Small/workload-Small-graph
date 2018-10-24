@@ -1,0 +1,103 @@
+|Bot_24|
+
+|Bot_23|
+
+|Bot_22|
+  -3721->|Bot_23|
+
+|Bot_20|
+  -1341->|Bot_7|
+  -776->|Bot_2|
+
+|Bot_19|
+
+|Bot_18|
+  -4576->|Bot_19|
+
+|Bot_16|
+
+|Bot_15|
+
+|Bot_14|
+
+|Bot_13|
+  -1696->|Alvin_Perkins|
+
+|Bot_12|
+  -1161->|Leonard_Reeves|
+
+|Bot_11|
+  -3200->|Bot_5|
+  -4331->|Bot_16|
+
+|Bot_10|
+
+|Bot_9|
+
+|Bot_8|
+
+|Bot_7|
+
+|Bot_6|
+  -2560->|Todd_Park|
+
+|Bot_5|
+
+|Bot_4|
+  -149->|Ola_Rios|
+
+|Bot_3|
+  -881->|Marion_Beck|
+
+|Bot_2|
+
+|Bot_1|
+
+|Lina_Bennett|
+
+|Alvin_Perkins|
+  -3226->|Marcus_Duncan|
+  -1117->|Ola_Rios|
+
+|Todd_Park|
+  -869->|Leonard_Reeves|
+
+|Josie_Burke|
+
+|Dean_Fields|
+  -1934->|Josie_Burke|
+
+|Emilie_Horton|
+  -137->|Tom_Casey|
+
+|Marcus_Duncan|
+
+|Leonard_Reeves|
+
+|Janie_Warner|
+
+|Ola_Rios|
+  -103->|Leonard_Reeves|
+  -967->|Janie_Warner|
+
+|Bernice_Gross|
+  -614->|Todd_Park|
+
+|Tom_Casey|
+
+|Jeffery_Walters|
+  -3039->|Bot_15|
+
+|Shawn_Ford|
+  -3391->|Alvin_Perkins|
+  -3040->|Josie_Burke|
+  -3076->|Todd_Park|
+  -713->|Lina_Bennett|
+  -2785->|Ola_Rios|
+  -44->|Emilie_Horton|
+
+|Irene_Weaver|
+  -427->|Shawn_Ford|
+
+|Marion_Beck|
+

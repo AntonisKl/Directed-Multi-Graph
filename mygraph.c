@@ -23,22 +23,26 @@ int main(int argc, char** argv) {
         char *arg1, *arg2, *arg3;
         while ((read = getline(&line, &len, fp)) != -1) {
 
-            arg1 = strtok(line, "\t");
-            removeSpaces(arg1);
-            arg2 = strtok(NULL, "\t");
-            removeSpaces(arg2);
-            arg3 = strtok(NULL, "\n");
-            removeSpaces(arg3);
-            if (arg1 == NULL || arg2 == NULL || arg3 == NULL || strlen(arg1) == 0 || strlen(arg2) == 0 || strlen(arg3) == 0) {
-                printf("Wrong input, try again\n");
-                break;
-            }
-            int weight = atoi(arg3);
-            if (weight <= 0) {  // error in conversion
-                printf("Invalid weight input, try again\n");
-                break;
-            }
-            insertEdgeToGraph(graph, arg1, arg2, weight);
+            handleInput(line, graph);
+
+            // for old input files
+            
+            // arg1 = strtok(line, "\t");
+            // removeSpaces(arg1);
+            // arg2 = strtok(NULL, "\t");
+            // removeSpaces(arg2);
+            // arg3 = strtok(NULL, "\n");
+            // removeSpaces(arg3);
+            // if (arg1 == NULL || arg2 == NULL || arg3 == NULL || strlen(arg1) == 0 || strlen(arg2) == 0 || strlen(arg3) == 0) {
+            //     printf("Wrong input, try again\n");
+            //     break;
+            // }
+            // int weight = atoi(arg3);
+            // if (weight <= 0) {  // error in conversion
+            //     printf("Invalid weight input, try again\n");
+            //     break;
+            // }
+            // insertEdgeToGraph(graph, arg1, arg2, weight);
 
         }
 
