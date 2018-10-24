@@ -14,7 +14,7 @@ typedef struct PathNode {
 
 void removeSpaces(char *str);
 
-void handleFlags(int argc, char** argv, char* inputFileName, char* outputFileName);
+void handleFlags(int argc, char** argv, char** inputFileName, char** outputFileName);
 char handleInput(char* input, Graph* graph);
 
 #endif

@@ -42,7 +42,7 @@ void destroyGraph(Graph* graph);
 
 void resetVisitedReceivingEdges(Graph* graph, char* nameTo);
 
-void printGraph(Graph* graph);
+void printGraph(Graph* graph, char* out);
 void printReceivingEdges(Graph* graph, char* nameTo);
 void printSimpleCirclesOfNode(Graph* graph, char* name);
 void printAllCirclesOfNode(Graph* graph, char* name, unsigned int minWeight);

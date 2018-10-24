@@ -94,24 +94,24 @@ void pushToStack(Stack* stack, HeadVertice* headVertice, unsigned int weight, He
     stack->stackNodes[stack->size]->weight = weight;
     //printf("byteSize push: %lu\n", sizeof(stack->stackNodes[stack->size]));
 
-    if (headVerticeFromToBePushed != NULL)
-        printf("name1: %s\n", headVerticeFromToBePushed->name);
+    // if (headVerticeFromToBePushed != NULL)
+    //     printf("name1: %s\n", headVerticeFromToBePushed->name);
 
-    printf("Pushed node in stack--> ");
-    if (stack->stackNodes[stack->size]->headVerticeFrom != NULL)
-        printf("nameFrom: %s ", stack->stackNodes[stack->size]->headVerticeFrom->name);
-    printf("name: %s, weight: %u\n", stack->stackNodes[stack->size]->headVertice->name, stack->stackNodes[stack->size]->weight);
+    // printf("Pushed node in stack--> ");
+    // if (stack->stackNodes[stack->size]->headVerticeFrom != NULL)
+    //     printf("nameFrom: %s ", stack->stackNodes[stack->size]->headVerticeFrom->name);
+    // printf("name: %s, weight: %u\n", stack->stackNodes[stack->size]->headVertice->name, stack->stackNodes[stack->size]->weight);
 
-    if (stack->stackNodes[stack->size]->headVerticeFrom != NULL) {
-        printf("edges (nameFrom): ");
+    // if (stack->stackNodes[stack->size]->headVerticeFrom != NULL) {
+    //     printf("edges (nameFrom): ");
 
-        ConnVertice* curConnVertice = stack->stackNodes[stack->size]->headVerticeFrom->firstConnVertice;
-        while (curConnVertice != NULL) {
-            printf("{|%s|, %u}, ", curConnVertice->name, curConnVertice->weight);
-            curConnVertice = curConnVertice->nextConnVertice;
-        }
-        printf("\n");
-    }
+    //     ConnVertice* curConnVertice = stack->stackNodes[stack->size]->headVerticeFrom->firstConnVertice;
+    //     while (curConnVertice != NULL) {
+    //         printf("{|%s|, %u}, ", curConnVertice->name, curConnVertice->weight);
+    //         curConnVertice = curConnVertice->nextConnVertice;
+    //     }
+    //     printf("\n");
+    // }
     stack->size++;
 
     return;
@@ -157,21 +157,21 @@ void popFromStack(Stack* stack, StackNode** poppedStackNode) {
     freeStackNode(stackNodeToBePopped);
     stackNodeToBePopped = NULL;
 
-    printf("Popped node from stack--> ");
-    if ((*poppedStackNode)->headVerticeFrom != NULL)
-        printf("nameFrom: %s ", (*poppedStackNode)->headVerticeFrom->name);
-    printf("name: %s, weight: %u\n", (*poppedStackNode)->headVertice->name, (*poppedStackNode)->weight);
+    // printf("Popped node from stack--> ");
+    // if ((*poppedStackNode)->headVerticeFrom != NULL)
+    //     printf("nameFrom: %s ", (*poppedStackNode)->headVerticeFrom->name);
+    // printf("name: %s, weight: %u\n", (*poppedStackNode)->headVertice->name, (*poppedStackNode)->weight);
 
-    if ((*poppedStackNode)->headVerticeFrom != NULL) {
-        printf("edges (nameFrom): ");
+    // if ((*poppedStackNode)->headVerticeFrom != NULL) {
+    //     printf("edges (nameFrom): ");
 
-        ConnVertice* curConnVertice = (*poppedStackNode)->headVerticeFrom->firstConnVertice;
-        while (curConnVertice != NULL) {
-            printf("{|%s|, %u}, ", curConnVertice->name, curConnVertice->weight);
-            curConnVertice = curConnVertice->nextConnVertice;
-        }
-        printf("\n");
-    }
+    //     ConnVertice* curConnVertice = (*poppedStackNode)->headVerticeFrom->firstConnVertice;
+    //     while (curConnVertice != NULL) {
+    //         printf("{|%s|, %u}, ", curConnVertice->name, curConnVertice->weight);
+    //         curConnVertice = curConnVertice->nextConnVertice;
+    //     }
+    //     printf("\n");
+    // }
 
     //printf("in pop10\n");
     stack->size--;
