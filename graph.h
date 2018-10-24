@@ -45,6 +45,7 @@ void resetVisitedReceivingEdges(Graph* graph, char* nameTo);
 void printGraph(Graph* graph);
 void printReceivingEdges(Graph* graph, char* nameTo);
 void printSimpleCirclesOfNode(Graph* graph, char* name);
+void printAllCirclesOfNode(Graph* graph, char* name, unsigned int minWeight);
 
 HeadVertice* findHeadVerticeInGraph(Graph* graph, char* name);
 void find2HeadVerticesInGraph(Graph* graph, char* name1, char* name2, HeadVertice* foundHeadVertices[2]);

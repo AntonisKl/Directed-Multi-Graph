@@ -181,6 +181,22 @@ char handleInput(char* input, Graph* graph) {
                 }
                 printSimpleCirclesOfNode(graph, arg1);
                 break;
+            case 'f':
+                arg1 = strtok(arguments, " ");
+                removeSpaces(arg1);
+                arg2 = strtok(NULL, "\n");
+                removeSpaces(arg2);
+                if (arg1 == NULL || arg2 == NULL || strlen(arg1) == 0 || strlen(arg2) == 0) {
+                    printf("Wrong input, try again\n");
+                    break;
+                }
+                int minWeight = atoi(arg2);
+                if (minWeight <= 0) {  // error in conversion
+                    printf("Invalid weight input, try again\n");
+                    break;
+                }
+                printAllCirclesOfNode(graph, arg1, minWeight);
+                break;
 
             case 'p':
                 printGraph(graph);
