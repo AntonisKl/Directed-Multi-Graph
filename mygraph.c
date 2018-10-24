@@ -22,18 +22,10 @@ int main(int argc, char** argv) {
 
         char *arg1, *arg2, *arg3;
         while ((read = getline(&line, &len, fp)) != -1) {
-            // arg1 = strtok(line, " ");
-            // arg2 = strtok(line, " ");
-            // arg3 = strtok(line, "\n");
 
             arg1 = strtok(line, "\t");
-            // printf("%s\n", arg1);
-
             removeSpaces(arg1);
             arg2 = strtok(NULL, "\t");
-            // while (arg2 == NULL || strlen(arg2) == 0)
-            //     arg2 = strtok(NULL, " ");
-
             removeSpaces(arg2);
             arg3 = strtok(NULL, "\n");
             removeSpaces(arg3);
@@ -48,23 +40,26 @@ int main(int argc, char** argv) {
             }
             insertEdgeToGraph(graph, arg1, arg2, weight);
 
-            // int result = handleInput(input, graph);
-            // if (result == 1)
-            //     break;
-
-            // printf("Retrieved line of length %zu :\n", read);
-            // printf("%s", line);
         }
 
         fclose(fp);
         if (line)
             free(line);
 
+        while (1) {
+            printf("Please type a command: ");
+            fgets(input, 50, stdin);
+            printf("You typed: %s", input);
+
+            int result = handleInput(input, graph);
+            if (result == 1)
+                break;
+        }
+
         if (outputFileName != NULL)
             printGraph(graph, outputFileName);
         else
             printGraph(graph, "stdout");
-        // read and create graph from input file (function)
     } else {
         while (1) {
             printf("Please type a command: ");

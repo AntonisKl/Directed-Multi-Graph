@@ -8,19 +8,16 @@ void removeSpaces(char* str) {
 
     int count = 0;
     int stringSize = strlen(str);
-    // printf("size: %d\n", stringSize);
 
     // Traverse the given string. If current character
     // is not space, then place it at index 'count++'
     for (int i = 0; i < stringSize; i++) {
-        // printf("%d\n", i);
         if (str[i] != ' ')
             str[count++] = str[i];  // here count is
                                     // incremented
     }
     str[count] = '\0';
     return;
-    // printf("Spaces removed\n");
 }
 
 void handleFlags(int argc, char** argv, char** inputFileName, char** outputFileName) {
@@ -53,19 +50,14 @@ void handleFlags(int argc, char** argv, char** inputFileName, char** outputFileN
 }
 
 char handleInput(char* input, Graph* graph) {
-    printf("Handling input...\n");
     char* commandS = strtok(input, " ");
-    // printf("string: %s\n", commandS);
     if (commandS != NULL)
         removeSpaces(commandS);
     if (commandS == NULL || strlen(commandS) == 0)
         printf("Wrong input, try again\n");
     char command = commandS[0];
-    // printf("Got command: %c\n", command);
     char* arguments = strtok(NULL, "\n");
-    // printf("%s\n", arguments);
-    // if (arguments != NULL)
-    //     removeSpaces(arguments);
+
     if (arguments == NULL || strlen(arguments) == 0) {
         if (command != 'e')
             printf("Wrong input, try again\n");
@@ -74,7 +66,6 @@ char handleInput(char* input, Graph* graph) {
             return 1;
         }
     } else {
-        printf("Got arguments\n");
         char *arg1, *arg2, *arg3, *arg4;
         switch (command) {
             case 'i':
